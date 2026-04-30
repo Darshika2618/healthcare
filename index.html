@@ -1,35 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Medicare Hub</title>
-<link rel="stylesheet" href="style.css">
+  <title>Clinic Demo App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<div class="layout">
 
-<div class="sidebar">
-  <h2>Medicare</h2>
-  <a href="index.html">Home</a>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="prescription.html">Prescriptions</a>
-</div>
+<h1>Clinic Demo System</h1>
 
-<div class="main">
-  <h1>Welcome</h1>
+<button onclick="go()">Enter Patients</button>
 
-  <div class="card">
-    <h3>Smart Healthcare Dashboard</h3>
-    <p>Track medicines, appointments and prescriptions in one place.</p>
-  </div>
+<script>
+function go() {
+  window.location.href = "patients.html";
+}
+</script>
 
-  <div class="card">
-    <h3>Why this matters</h3>
-    <p>Helps manage daily health routines and clinical workflows.</p>
-  </div>
-
-</div>
-
-</div>
 </body>
 </html>
