@@ -6,32 +6,34 @@
 </head>
 
 <body>
+<div class="layout">
 
-<header>
-  <h1>Dashboard</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="prescription.html">Prescriptions</a>
-  </nav>
-</header>
-
-<div class="container">
-
-<div class="card">
-  <h2>Medicine Timetable</h2>
-  <input id="medName" placeholder="Medicine">
-  <input id="medTime" type="time">
-  <button onclick="addMed()">Add</button>
-  <ul id="medList"></ul>
+<div class="sidebar">
+  <h2>Medicare</h2>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="prescription.html">Prescriptions</a>
 </div>
 
-<div class="card">
-  <h2>Appointments</h2>
-  <input id="docName" placeholder="Doctor">
-  <input id="appDate" type="date">
-  <button onclick="addApp()">Add</button>
-  <ul id="appList"></ul>
+<div class="main">
+  <h1>Dashboard</h1>
+
+  <div class="card">
+    <h3>Medicine Timetable</h3>
+    <input id="medName" placeholder="Medicine">
+    <input id="medTime" type="time">
+    <button onclick="addMed()">Add</button>
+    <ul id="medList"></ul>
+  </div>
+
+  <div class="card">
+    <h3>Appointments</h3>
+    <input id="docName" placeholder="Doctor">
+    <input id="appDate" type="date">
+    <button onclick="addApp()">Add</button>
+    <ul id="appList"></ul>
+  </div>
+
 </div>
 
 </div>
@@ -41,27 +43,20 @@ let meds = JSON.parse(localStorage.getItem("meds")) || [];
 let apps = JSON.parse(localStorage.getItem("apps")) || [];
 
 function render() {
-  document.getElementById("medList").innerHTML =
-    meds.map(m => `<li>${m.name} - ${m.time}</li>`).join("");
-
-  document.getElementById("appList").innerHTML =
-    apps.map(a => `<li>${a.doc} - ${a.date}</li>`).join("");
+  medList.innerHTML = meds.map(m => `<li>${m.name} - ${m.time}</li>`).join("");
+  appList.innerHTML = apps.map(a => `<li>${a.doc} - ${a.date}</li>`).join("");
 }
 
 function addMed() {
-  let name = medName.value;
-  let time = medTime.value;
-  if (!name || !time) return;
-  meds.push({name, time});
+  if (!medName.value || !medTime.value) return;
+  meds.push({name: medName.value, time: medTime.value});
   localStorage.setItem("meds", JSON.stringify(meds));
   render();
 }
 
 function addApp() {
-  let doc = docName.value;
-  let date = appDate.value;
-  if (!doc || !date) return;
-  apps.push({doc, date});
+  if (!docName.value || !appDate.value) return;
+  apps.push({doc: docName.value, date: appDate.value});
   localStorage.setItem("apps", JSON.stringify(apps));
   render();
 }
