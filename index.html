@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Medicare Hub</title>
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f7fb;
+}
+header {
+  background: #2c7be5;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+.container {
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+input, button {
+  padding: 8px;
+  margin: 5px;
+}
+button {
+  background: #2c7be5;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Medicare Hub</h1>
+</header>
+
+<div class="container">
+
+<!-- Medicine Timetable -->
+<div class="card">
+  <h2>Medicine Timetable</h2>
+  <input id="medName" placeholder="Medicine Name">
+  <input id="medTime" type="time">
+  <button onclick="addMedicine()">Add</button>
+  <ul id="medList"></ul>
+</div>
+
+<!-- Appointment Scheduler -->
+<div class="card">
+  <h2>Appointments</h2>
+  <input id="docName" placeholder="Doctor Name">
+  <input id="appDate" type="date">
+  <button onclick="addAppointment()">Schedule</button>
+  <ul id="appList"></ul>
+</div>
+
+<!-- Prescription Saver -->
+<div class="card">
+  <h2>Prescriptions</h2>
+  <textarea id="prescription" placeholder="Write prescription..." rows="4" cols="40"></textarea><br>
+  <button onclick="savePrescription()">Save</button>
+  <ul id="presList"></ul>
+</div>
+
+</div>
+
+<script>
+
+// Load saved data
+let medicines = JSON.parse(localStorage.getItem("medicines")) || [];
+let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+let prescriptions = JSON.parse(localStorage.getItem("prescriptions")) || [];
+
+function render() {
+  document.getElementById("medList").innerHTML =
+    medicines.map(m => `<li>${m.name} at ${m.time}</li>`).join("");
+
+  document.getElementById("appList").innerHTML =
+    appointments.map(a => `<li>${a.doctor} on ${a.date}</li>`).join("");
+
+  document.getElementById("presList").innerHTML =
+    prescriptions.map(p => `<li>${p}</li>`).join("");
+}
+
+function addMedicine() {
+  let name = document.getElementById("medName").value;
+  let time = document.getElementById("medTime").value;
+  if (!name || !time) return;
+  medicines.push({ name, time });
+  localStorage.setItem("medicines", JSON.stringify(medicines));
+  render();
+}
+
+function addAppointment() {
+  let doctor = document.getElementById("docName").value;
+  let date = document.getElementById("appDate").value;
+  if (!doctor || !date) return;
+  appointments.push({ doctor, date });
+  localStorage.setItem("appointments", JSON.stringify(appointments));
+  render();
+}
+
+function savePrescription() {
+  let text = document.getElementById("prescription").value;
+  if (!text) return;
+  prescriptions.push(text);
+  localStorage.setItem("prescriptions", JSON.stringify(prescriptions));
+  render();
+}
+
+// Initial render
+render();
+
+</script>
+
+</body>
+</html>
