@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Dashboard</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="prescription.html">Prescriptions</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<div class="card">
+  <h2>Medicine Timetable</h2>
+  <input id="medName" placeholder="Medicine">
+  <input id="medTime" type="time">
+  <button onclick="addMed()">Add</button>
+  <ul id="medList"></ul>
+</div>
+
+<div class="card">
+  <h2>Appointments</h2>
+  <input id="docName" placeholder="Doctor">
+  <input id="appDate" type="date">
+  <button onclick="addApp()">Add</button>
+  <ul id="appList"></ul>
+</div>
+
+</div>
+
+<script>
+let meds = JSON.parse(localStorage.getItem("meds")) || [];
+let apps = JSON.parse(localStorage.getItem("apps")) || [];
+
+function render() {
+  document.getElementById("medList").innerHTML =
+    meds.map(m => `<li>${m.name} - ${m.time}</li>`).join("");
+
+  document.getElementById("appList").innerHTML =
+    apps.map(a => `<li>${a.doc} - ${a.date}</li>`).join("");
+}
+
+function addMed() {
+  let name = medName.value;
+  let time = medTime.value;
+  if (!name || !time) return;
+  meds.push({name, time});
+  localStorage.setItem("meds", JSON.stringify(meds));
+  render();
+}
+
+function addApp() {
+  let doc = docName.value;
+  let date = appDate.value;
+  if (!doc || !date) return;
+  apps.push({doc, date});
+  localStorage.setItem("apps", JSON.stringify(apps));
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
