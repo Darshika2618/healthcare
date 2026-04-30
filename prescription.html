@@ -6,22 +6,24 @@
 </head>
 
 <body>
+<div class="layout">
 
-<header>
+<div class="sidebar">
+  <h2>Medicare</h2>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="prescription.html">Prescriptions</a>
+</div>
+
+<div class="main">
   <h1>Prescriptions</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="prescription.html">Prescriptions</a>
-  </nav>
-</header>
 
-<div class="container">
+  <div class="card">
+    <textarea id="text" placeholder="Write prescription..."></textarea><br>
+    <button onclick="save()">Save</button>
+    <ul id="list"></ul>
+  </div>
 
-<div class="card">
-  <textarea id="text" placeholder="Write prescription..."></textarea><br>
-  <button onclick="save()">Save</button>
-  <ul id="list"></ul>
 </div>
 
 </div>
@@ -30,14 +32,12 @@
 let data = JSON.parse(localStorage.getItem("pres")) || [];
 
 function render() {
-  document.getElementById("list").innerHTML =
-    data.map(d => `<li>${d}</li>`).join("");
+  list.innerHTML = data.map(d => `<li>${d}</li>`).join("");
 }
 
 function save() {
-  let t = text.value;
-  if (!t) return;
-  data.push(t);
+  if (!text.value) return;
+  data.push(text.value);
   localStorage.setItem("pres", JSON.stringify(data));
   render();
 }
