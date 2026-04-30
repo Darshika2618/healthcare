@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - Medicare Hub</title>
+  <title>Medicare Dashboard</title>
 
   <style>
     body {
@@ -52,7 +52,7 @@
 <div class="container">
   <h1>Healthcare Dashboard</h1>
 
-  <!-- Medicine Section -->
+  <!-- Medicine -->
   <div class="card">
     <h2>Medicine Timetable</h2>
     <input id="medName" placeholder="Medicine Name">
@@ -61,7 +61,7 @@
     <ul id="medList"></ul>
   </div>
 
-  <!-- Appointment Section -->
+  <!-- Appointment -->
   <div class="card">
     <h2>Appointments</h2>
     <input id="docName" placeholder="Doctor Name">
@@ -72,77 +72,70 @@
 </div>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
-<script>
-const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
-  databaseURL: "PASTE_YOUR_DB_URL",
-  projectId: "PASTE_YOUR_PROJECT_ID"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQqVTAUDrJWkzMVegjerPANHANSLQ7ESw",
+    authDomain: "medicare-hub-ee089.firebaseapp.com",
+    databaseURL: "https://medicare-hub-ee089-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "medicare-hub-ee089",
+    storageBucket: "medicare-hub-ee089.appspot.com",
+    messagingSenderId: "825503472209",
+    appId: "1:825503472209:web:9567f5ed4f947461e0b670"
+  };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
+  // Add Medicine
+  window.addMedicine = function() {
+    const name = document.getElementById("medName").value;
+    const time = document.getElementById("medTime").value;
 
-// 🔹 Add Medicine
-function addMedicine() {
-  const name = medName.value;
-  const time = medTime.value;
+    if (!name || !time) return alert("Fill all fields");
 
-  if (!name || !time) return alert("Fill all fields");
+    push(ref(db, "medicines"), {
+      name: name,
+      time: time
+    });
+  };
 
-  db.ref("medicines").push({
-    name: name,
-    time: time
+  // Load Medicines
+  onValue(ref(db, "medicines"), snapshot => {
+    const data = snapshot.val() || {};
+    const list = document.getElementById("medList");
+    list.innerHTML = "";
+
+    Object.values(data).forEach(m => {
+      list.innerHTML += `<li>${m.name} - ${m.time}</li>`;
+    });
   });
 
-  medName.value = "";
-  medTime.value = "";
-}
+  // Add Appointment
+  window.addAppointment = function() {
+    const doc = document.getElementById("docName").value;
+    const date = document.getElementById("appDate").value;
 
+    if (!doc || !date) return alert("Fill all fields");
 
-// 🔹 Load Medicines
-db.ref("medicines").on("value", snapshot => {
-  let data = snapshot.val();
-  medList.innerHTML = "";
+    push(ref(db, "appointments"), {
+      doctor: doc,
+      date: date
+    });
+  };
 
-  for (let id in data) {
-    let m = data[id];
-    medList.innerHTML += `<li>${m.name} - ${m.time}</li>`;
-  }
-});
+  // Load Appointments
+  onValue(ref(db, "appointments"), snapshot => {
+    const data = snapshot.val() || {};
+    const list = document.getElementById("appList");
+    list.innerHTML = "";
 
-
-// 🔹 Add Appointment
-function addAppointment() {
-  const doc = docName.value;
-  const date = appDate.value;
-
-  if (!doc || !date) return alert("Fill all fields");
-
-  db.ref("appointments").push({
-    doctor: doc,
-    date: date
+    Object.values(data).forEach(a => {
+      list.innerHTML += `<li>${a.doctor} - ${a.date}</li>`;
+    });
   });
-
-  docName.value = "";
-  appDate.value = "";
-}
-
-
-// 🔹 Load Appointments
-db.ref("appointments").on("value", snapshot => {
-  let data = snapshot.val();
-  appList.innerHTML = "";
-
-  for (let id in data) {
-    let a = data[id];
-    appList.innerHTML += `<li>${a.doctor} - ${a.date}</li>`;
-  }
-});
 
 </script>
 
