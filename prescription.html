@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prescriptions</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Prescriptions</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="prescription.html">Prescriptions</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<div class="card">
+  <textarea id="text" placeholder="Write prescription..."></textarea><br>
+  <button onclick="save()">Save</button>
+  <ul id="list"></ul>
+</div>
+
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("pres")) || [];
+
+function render() {
+  document.getElementById("list").innerHTML =
+    data.map(d => `<li>${d}</li>`).join("");
+}
+
+function save() {
+  let t = text.value;
+  if (!t) return;
+  data.push(t);
+  localStorage.setItem("pres", JSON.stringify(data));
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
