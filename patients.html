@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patients</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Patients</h2>
+
+<!-- INPUTS -->
+<input id="pname" placeholder="Patient Name">
+<input id="page" placeholder="Age">
+<button onclick="addPatient()">Add Patient</button>
+
+<hr>
+
+<!-- DISPLAY -->
+<div id="list"></div>
+
+<script type="module" src="firebase.js"></script>
+
+<script type="module">
+import "./firebase.js";
+
+// ADD PATIENT
+window.addPatient = function () {
+  const name = document.getElementById("pname").value;
+  const age = document.getElementById("page").value;
+
+  push(ref(db, "clinic_demo/patients"), {
+    name: name,
+    age: age
+  });
+
+  document.getElementById("pname").value = "";
+  document.getElementById("page").value = "";
+};
+
+// DISPLAY PATIENTS LIVE
+onValue(ref(db, "clinic_demo/patients"), (snapshot) => {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  snapshot.forEach((child) => {
+    const data = child.val();
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <b>${data.name}</b> (Age: ${data.age})
+    `;
+
+    list.appendChild(div);
+  });
+});
+</script>
+
+</body>
+</html>
