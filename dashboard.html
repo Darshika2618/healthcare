@@ -1,4 +1,28 @@
-<!DOCTYPE html>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE",
+  databaseURL: "PASTE_HERE",
+  projectId: "PASTE_HERE"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+// 🔥 This will create data automatically
+function createUser() {
+  db.ref("users/user1").set({
+    email: "test@gmail.com",
+    role: "patient"
+  });
+}
+</script>
+
+<button onclick="createUser()">Create User in DB</button><!DOCTYPE html>
 <html>
 <head>
 <title>Dashboard</title>
