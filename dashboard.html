@@ -71,7 +71,6 @@
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
   import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
@@ -89,21 +88,21 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Add Medicine
+  // ✅ Add Medicine (inside user1)
   window.addMedicine = function() {
     const name = document.getElementById("medName").value;
     const time = document.getElementById("medTime").value;
 
     if (!name || !time) return alert("Fill all fields");
 
-    push(ref(db, "medicines"), {
+    push(ref(db, "users/user1/medicines"), {
       name: name,
       time: time
     });
   };
 
-  // Load Medicines
-  onValue(ref(db, "medicines"), snapshot => {
+  // ✅ Load Medicines
+  onValue(ref(db, "users/user1/medicines"), snapshot => {
     const data = snapshot.val() || {};
     const list = document.getElementById("medList");
     list.innerHTML = "";
@@ -113,21 +112,21 @@
     });
   });
 
-  // Add Appointment
+  // ✅ Add Appointment (inside user1)
   window.addAppointment = function() {
     const doc = document.getElementById("docName").value;
     const date = document.getElementById("appDate").value;
 
     if (!doc || !date) return alert("Fill all fields");
 
-    push(ref(db, "appointments"), {
+    push(ref(db, "users/user1/appointments"), {
       doctor: doc,
       date: date
     });
   };
 
-  // Load Appointments
-  onValue(ref(db, "appointments"), snapshot => {
+  // ✅ Load Appointments
+  onValue(ref(db, "users/user1/appointments"), snapshot => {
     const data = snapshot.val() || {};
     const list = document.getElementById("appList");
     list.innerHTML = "";
